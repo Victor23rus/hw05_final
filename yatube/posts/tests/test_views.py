@@ -187,28 +187,28 @@ class PostURLTests(TestCase):
                 self.assertNotIn(expected, form_field)
 
     def test_cache(self):
-        response_1 = self.authorized_client.get(reverse("posts:index"))
+        response_1 = self.authorized_client.get(reverse('posts:index'))
         content_1 = response_1.content
         Post.objects.all().delete
-        response_2 = self.authorized_client.get(reverse("posts:index"))
+        response_2 = self.authorized_client.get(reverse('posts:index'))
         content_2 = response_2.content
         self.assertEqual(content_1, content_2)
         Post.objects.all().delete
         cache.clear()
-        response_3 = self.authorized_client.get(reverse("posts:index"))
+        response_3 = self.authorized_client.get(reverse('posts:index'))
         content_3 = response_3.content
         self.assertNotEqual(content_1, content_3)
 
     def test_follow_page(self):
-        response = self.authorized_client.get(reverse("posts:follow_index"))
-        self.assertEqual(len(response.context["page_obj"]), 1)
+        response = self.authorized_client.get(reverse('posts:follow_index'))
+        self.assertEqual(len(response.context['page_obj']), 0)
         Follow.objects.get_or_create(user=self.user, author=self.post.author)
-        response_2 = self.authorized_client.get(reverse("posts:follow_index"))
-        self.assertEqual(len(response_2.context["page_obj"]), 1)
-        self.assertIn(self.post, response_2.context["page_obj"])
+        response_2 = self.authorized_client.get(reverse('posts:follow_index'))
+        self.assertEqual(len(response_2.context['page_obj']), 1)
+        self.assertIn(self.post, response_2.context['page_obj'])
         Follow.objects.all().delete()
-        response_3 = self.authorized_client.get(reverse("posts:follow_index"))
-        self.assertEqual(len(response_3.context["page_obj"]), 1)
+        response_3 = self.authorized_client.get(reverse('posts:follow_index'))
+        self.assertEqual(len(response_3.context['page_obj']), 0)
 
 
 PAGINATOR_DISPLAY = 13
