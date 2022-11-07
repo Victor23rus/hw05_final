@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<h1>{{ author_title }}</h1>
+<p>
+  {{ author_text }}
+</p>
+  <img class="w-50 mx-auto d-block" src="{% static 'img/IMG_0083.png' %}" alt="photo">
+{% endblock %} 

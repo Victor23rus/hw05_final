@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %} Профайл пользователя {{ author_id }}{% endblock %}
+{% block content %}
+{% load thumbnail %}     
+<div class="mb-5">
+  <h1>Все посты пользователя {{ author_id }}</h1>
+  <h3>Всего постов: {{ author_id.posts.count }}</h3>
+  {% if author != request.user %}
+    {% if following %}
+    <a
+      class="btn btn-lg btn-light"
+      href="{% url 'posts:profile_unfollow' author_id.username %}" role="button">
+      Отписаться
+    </a>
+  {% else %}
+      <a
+        class="btn btn-lg btn-primary"
+        href="{% url 'posts:profile_follow' author_id.username %}" role="button">
+        Подписаться
+      </a>
+      {% endif %}
+   {% endif %}
+</div>   
+{% for post in page_obj %}
+<article>
+  <ul>
+    <li>
+      Автор: {{ post.author.get_full_name }} {{ author.get_full_name }}
+    </li>
+    <li>
+      Дата публикации: {{post.pub_date|date:"d E Y" }}
+    </li>
+  </ul>
+  {% thumbnail post.image "400x443" crop="center" upscale=True as im %}
+  <img class="card-img my-2" src="{{ im.url }}">
+  {% endthumbnail %}
+  <p>{{ post.text|linebreaksbr }}</p>
+  <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
+  {% if not forloop.last %}<hr>{% endif %}
+</article>
+{% endfor %}
+{% if post.group %}   
+<a href="{% url 'posts:group_list' post.group.slug %}">все записи группы {{ post.group.slug }} </a>
+{% endif %}      
+{% include 'includes/paginator.html' %}  
+{% endblock %}
