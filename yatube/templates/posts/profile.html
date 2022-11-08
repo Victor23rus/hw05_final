@@ -34,7 +34,7 @@
   {% thumbnail post.image "400x443" crop="center" upscale=True as im %}
   <img class="card-img my-2" src="{{ im.url }}">
   {% endthumbnail %}
-  <p>{{ post.text|linebreaksbr }}</p>
+  <p>{{ post.text | linebreaksbr }}</p>
   <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
   {% if not forloop.last %}<hr>{% endif %}
 </article>

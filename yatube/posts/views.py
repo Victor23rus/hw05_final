@@ -28,11 +28,11 @@ def group_posts(request, slug):
 def profile(request, username):
     author_id = get_object_or_404(User, username=username)
     page_obj = paginate_page(author_id.posts.all(), request)
-    following = Follow.objects.filter(author=author_id).count()
+    following = author_id.following.exists()
     context = {
         'page_obj': page_obj,
         'author_id': author_id,
-        'following': following,
+        'following': following
     }
     return render(request, 'posts/profile.html', context)
 
@@ -40,12 +40,10 @@ def profile(request, username):
 def post_detail(request, post_id):
     form = CommentForm(request.POST or None)
     post = get_object_or_404(Post, pk=post_id)
-    posts_count = post.author.posts.count()
     comments = Comment.objects.filter(post=post)
     context = {
         'post': post,
-        'posts_count': posts_count,
-        "form": form,
+        'form': form,
         'comments': comments,
     }
 
@@ -101,10 +99,7 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-    follows = Follow.objects.filter(user=request.user).values_list(
-        'author_id'
-    )
-    posts = Post.objects.filter(author_id__in=follows)
+    posts = Post.objects.filter(author_id__following__user=request.user)
     page_obj = paginate_page(posts, request)
     context = {
         'page_obj': page_obj,

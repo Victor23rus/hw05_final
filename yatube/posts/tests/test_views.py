@@ -83,7 +83,7 @@ class PostURLTests(TestCase):
         self.assertIn('page_obj', response.context)
         self.assertEqual(first_object.image, self.post.image)
         self.assertEqual(post_author_0, PostURLTests.user)
-        self.assertEqual(post_text_0, 'Тестовый пост')
+        self.assertEqual(post_text_0, self.post.text)
         self.assertEqual(post_group_0, PostURLTests.group)
 
     def test_post_group_show_correct_context(self):
@@ -97,7 +97,7 @@ class PostURLTests(TestCase):
         self.assertIn('page_obj', response.context)
         self.assertEqual(first_object.image, self.post.image)
         self.assertEqual(post_author_0, PostURLTests.user)
-        self.assertEqual(post_text_0, 'Тестовый пост')
+        self.assertEqual(post_text_0, self.post.text)
         self.assertEqual(post_group_0, PostURLTests.group)
 
     def test_profile_show_correct_context(self):
@@ -111,7 +111,7 @@ class PostURLTests(TestCase):
         self.assertIn('page_obj', response.context)
         self.assertEqual(first_object.image, self.post.image)
         self.assertEqual(post_author_0, PostURLTests.user)
-        self.assertEqual(post_text_0, 'Тестовый пост')
+        self.assertEqual(post_text_0, self.post.text)
         self.assertEqual(post_group_0, PostURLTests.group)
 
     def test_post_detail_show_correct_context(self):
@@ -124,7 +124,7 @@ class PostURLTests(TestCase):
         post_group = first_object.group
         self.assertEqual(first_object.image, self.post.image)
         self.assertEqual(post_author, PostURLTests.user)
-        self.assertEqual(post_text, 'Тестовый пост')
+        self.assertEqual(post_text, self.post.text)
         self.assertEqual(post_group, Group.objects.get(slug=self.group.slug))
 
     def test_post_edit_show_correct_context(self):
@@ -206,6 +206,8 @@ class PostURLTests(TestCase):
         response_2 = self.authorized_client.get(reverse('posts:follow_index'))
         self.assertEqual(len(response_2.context['page_obj']), 1)
         self.assertIn(self.post, response_2.context['page_obj'])
+
+    def test_unfollow_page(self):
         Follow.objects.all().delete()
         response_3 = self.authorized_client.get(reverse('posts:follow_index'))
         self.assertEqual(len(response_3.context['page_obj']), 0)

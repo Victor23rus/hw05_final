@@ -23,10 +23,10 @@ class PostModelTest(TestCase):
             text='Тестовый пост',
         )
         cls.url_names = [
-            "/",
-            f"/group/{cls.group.slug}/",
-            f"/profile/{cls.user}/",
-            f"/posts/{cls.post.id}/",
+            '/',
+            f'/group/{cls.group.slug}/',
+            f'/profile/{cls.user}/',
+            f'/posts/{cls.post.id}/',
         ]
         cls.url_templates_names = {
             '/': 'posts/index.html',
@@ -72,11 +72,11 @@ class PostModelTest(TestCase):
     def test_page_404(self):
         """запрос к несуществующей странице."""
         response = self.guest_client.get('/unexisting_page/')
-        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
 class ViewTestClass(TestCase):
     def test_error_page(self):
         response = self.client.get('/nonexist-page/')
-        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(response, 'core/404.html')

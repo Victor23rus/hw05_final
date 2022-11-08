@@ -101,4 +101,4 @@ class PostFormTest(TestCase):
             response, reverse(
                 'posts:post_detail', kwargs={'post_id': self.post.id}))
         self.assertEqual(Comment.objects.count(), comment + 1)
-        self.assertTrue(Comment.objects.filter(text='Комментарий').exists())
+        self.assertTrue(Comment.objects.filter().exists())
